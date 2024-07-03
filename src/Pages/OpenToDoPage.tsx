@@ -3,6 +3,8 @@ import ToDoCard from "../Components/ToDoCard.tsx";
 
 type OpenToDosprops = {
     toDo:ToDo[]
+    prev:(id:string,description:string,status:string)=> void
+    next:(id:string,description:string,status:string)=> void
 }
 
 export default function OpenToDoPage(props:Readonly<OpenToDosprops>) {
@@ -10,7 +12,7 @@ export default function OpenToDoPage(props:Readonly<OpenToDosprops>) {
     const filteredToDos = props.toDo
         .filter((toDo) => toDo.status.toLowerCase().includes("open"));
 
-    const toDos = filteredToDos.map((todo)=> <ToDoCard key={todo.id} todo={todo}/>);
+    const toDos = filteredToDos.map((todo)=> <ToDoCard key={todo.id} todo={todo} next={props.next} prev={props.prev}/>);
     return (
         <>
             {toDos}

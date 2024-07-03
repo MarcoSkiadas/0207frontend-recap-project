@@ -14,7 +14,6 @@ export type ToDo = {
     id:string,
     description:string,
     status:string
-
 }
 
 function App() {
@@ -24,6 +23,7 @@ function App() {
     const [id, setId] = useState<string>("");
     const [status, setStatus] = useState<string>("OPEN");
 
+
     useEffect(()=> {
         getAllToDos()
     },[])
@@ -32,13 +32,6 @@ function App() {
         axios.get("/api/todo")
             .then(response => setToDo(response.data))
             .catch(error => console.log(error))
-    }
-    const handleToDo = (id: string, description: string, status: string) => {
-        setToDo([...toDo, {
-            id,
-            description,
-            status
-        }]);
     }
 
     function addNewToDo(){
@@ -55,6 +48,35 @@ function App() {
         setId("");
         setStatus("OPEN");
     }
+    function next(id:string,description:string,status:string) {
+        let newStatus:string = "OPEN"
+        if(status==="OPEN") {
+            newStatus="IN_PROGRESS"
+        }
+        else if(status==="IN_PROGRESS") {
+            newStatus="DONE"
+        }
+
+        axios.put("/api/todo/" + id + "/update", {id: id, description: description, status: newStatus})
+            .then(response => console.log(response.data))
+            .then(getAllToDos)
+            .catch(error => console.log(error))
+    }
+    function prev(id:string,description:string,status:string) {
+        let newStatus:string = "OPEN"
+        if(status==="IN_PROGRESS") {
+            newStatus="OPEN"
+        }
+        else if(status==="DONE") {
+            newStatus="IN_PROGRESS"
+        }
+
+        axios.put("/api/todo/" + id + "/update", {id: id, description: description, status: newStatus})
+            .then(response => console.log(response.data))
+            .then(getAllToDos)
+            .catch(error => console.log(error))
+    }
+
 
   return (
     <>
@@ -63,7 +85,7 @@ function App() {
       </header>
       <Routes>
         <Route path={"/"} element={<HomePage/>}/>
-        <Route path={"/api/todo"} element={<ToDos toDo={toDo} />}/>
+        <Route path={"/api/todo"} element={<ToDos toDo={toDo} next={next} prev={prev}/>}/>
         <Route path={"/api/todo/open"} element={<OpenToDoPage toDo={toDo}/>}/>
         <Route path={"/api/todo/doing"} element={<DoingToDoPage toDo={toDo}/>}/>
         <Route path={"/api/todo/done"} element={<DoneToDoPage toDo={toDo}/>}/>
