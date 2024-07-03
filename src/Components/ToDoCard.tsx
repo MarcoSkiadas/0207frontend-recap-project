@@ -1,10 +1,10 @@
 import {ToDo} from "../App.tsx";
-import {useState} from "react";
 
 type ToDoCardProps = {
     todo: ToDo ;
     next:(id:string,description:string,status:string)=> void
     prev:(id:string,description:string,status:string)=> void
+    deleteToDo:(id:string)=> void
 }
 
 export default function ToDoCard(props: Readonly<ToDoCardProps>) {
@@ -20,7 +20,7 @@ export default function ToDoCard(props: Readonly<ToDoCardProps>) {
             {props.todo.status !== "DONE" ?
             <button onClick={() => props.next(props.todo.id,props.todo.description,props.todo.status) }>Next</button>
             :
-                <button >Delete</button>
+                <button onClick={() => props.deleteToDo(props.todo.id)} >Delete</button>
             }
         </div>
     );

@@ -76,6 +76,13 @@ function App() {
             .then(getAllToDos)
             .catch(error => console.log(error))
     }
+    function deleteToDo(id:string) {
+
+        axios.delete("/api/todo/" + id)
+            .then(response => console.log(response.data))
+            .then(getAllToDos)
+            .catch(error => console.log(error))
+    }
 
 
   return (
@@ -85,16 +92,16 @@ function App() {
       </header>
       <Routes>
         <Route path={"/"} element={<HomePage/>}/>
-        <Route path={"/api/todo"} element={<ToDos toDo={toDo} next={next} prev={prev}/>}/>
-        <Route path={"/api/todo/open"} element={<OpenToDoPage toDo={toDo}/>}/>
-        <Route path={"/api/todo/doing"} element={<DoingToDoPage toDo={toDo}/>}/>
-        <Route path={"/api/todo/done"} element={<DoneToDoPage toDo={toDo}/>}/>
+        <Route path={"/api/todo"} element={<ToDos toDo={toDo} next={next} prev={prev} deleteToDo={deleteToDo}/>}/>
+        <Route path={"/api/todo/open"} element={<OpenToDoPage toDo={toDo} next={next} prev={prev} deleteToDo={deleteToDo}/>}/>
+        <Route path={"/api/todo/doing"} element={<DoingToDoPage toDo={toDo} next={next} prev={prev} deleteToDo={deleteToDo}/>}/>
+        <Route path={"/api/todo/done"} element={<DoneToDoPage toDo={toDo} next={next} prev={prev} deleteToDo={deleteToDo}/>}/>
       </Routes>
 
        <form onSubmit={handleSubmit}>
            <label>
                Add:
-               <input type={"text"} placeholder={"Entere a new ToDo"} value={description} onChange={(e)=> setDescription(e.target.value)}/>
+               <input type={"text"} placeholder={"Enter a new ToDo"} value={description} onChange={(e)=> setDescription(e.target.value)}/>
                <button>Submit</button>
            </label>
     </form>
